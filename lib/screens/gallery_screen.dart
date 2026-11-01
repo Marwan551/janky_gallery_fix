@@ -1,7 +1,5 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-
 import '../data/photo_repository.dart';
 import '../main.dart';
 import '../models/photo.dart';
@@ -89,20 +87,15 @@ class _GalleryScreenState extends State<GalleryScreen>
                 return const Center(child: CircularProgressIndicator());
               }
               final photos = snapshot.data!;
-              return SingleChildScrollView(
+              return ListView.builder(
                 controller: _scrollController,
-                child: Column(
-                  children: [
-                    _buildHeader(context, photos),
-                    ListView(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        for (final photo in photos) PhotoCard(photo: photo),
-                      ],
-                    ),
-                  ],
-                ),
+                itemCount: photos.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return _buildHeader(context, photos);
+                  }
+                  return PhotoCard(photo: photos[index - 1]);
+                },
               );
             },
           );

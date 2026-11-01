@@ -45,6 +45,7 @@ class _PhotoCardState extends State<PhotoCard> {
             borderRadius: BorderRadius.circular(16),
             child: Stack(
               children: [
+                //loading assets directly from assets folder
                 Image.asset(
                   photo.asset,
                   width: width - 32,
@@ -57,6 +58,7 @@ class _PhotoCardState extends State<PhotoCard> {
                   bottom: 0,
                   child: ClipRect(
                     child: BackdropFilter(
+                      // Too much load on GPU
                       filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
                       child: Container(
                         color: Colors.black.withValues(alpha: 0.25),
