@@ -19,7 +19,6 @@ class PhotoRepository {
     });
   }
 
-  // Sorting uses too much memory
   double _trendingScore(Photo photo) {
     final commentLikes =
         photo.comments.fold<int>(0, (sum, c) => sum + c.likes);

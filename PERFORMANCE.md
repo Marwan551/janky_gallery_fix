@@ -54,3 +54,20 @@
     });
   }
   ```
+
+---
+
+## #3 - High GPU Load from Heavy Blur in `PhotoCard`
+
+- **Issue**: High sigma values (`sigmaX: 12, sigmaY: 12`) in `BackdropFilter` caused excessive GPU load and rendering lag during scrolling.
+- **Solution**: Reduced blur sigma to `6` to lower GPU overhead while maintaining visual aesthetics:
+  ```dart
+  BackdropFilter(
+    filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+    child: Container(
+      color: Colors.black.withValues(alpha: 0.25),
+      padding: EdgeInsets.fromLTRB(14, 10, 6, 10),
+      child: ...
+    ),
+  )
+  ```
