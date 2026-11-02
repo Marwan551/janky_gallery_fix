@@ -1,18 +1,22 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:flutter/services.dart';
 
 import '../models/photo.dart';
 
+// loading all images at once creates a load on the main thread
 class PhotoRepository {
   Future<List<Photo>> loadPhotos() async {
     final raw = await rootBundle.loadString('assets/data/photos.json');
-    final data = jsonDecode(raw) as List<dynamic>;
-    final photos = data
-        .map((item) => Photo.fromJson(item as Map<String, dynamic>))
-        .toList();
-    photos.sort((a, b) => _trendingScore(b).compareTo(_trendingScore(a)));
-    return photos;
+    return Isolate.run(() {
+      final data = jsonDecode(raw) as List<dynamic>;
+      final photos = data
+          .map((item) => Photo.fromJson(item as Map<String, dynamic>))
+          .toList();
+      photos.sort((a, b) => _trendingScore(b).compareTo(_trendingScore(a)));
+      return photos;
+    });
   }
 
   // Sorting uses too much memory
